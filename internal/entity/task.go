@@ -140,6 +140,10 @@ func (t *Task) ListAllTasks() ([]Task, error) {
 		return nil, err
 	}
 
+	if len(tasks.Tasks) < 1 {
+		return nil, fmt.Errorf("need to add a new task to list tasks")
+	}
+
 	for _, task := range tasks.Tasks {
 		allTasks = append(allTasks, task)
 	}
@@ -157,6 +161,10 @@ func (t *Task) ListTasksFilteredByStatus(status string) ([]Task, error) {
 	tasks, err := utils.ReadFile[ReadTaskFile](filename)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(tasks.Tasks) < 1 {
+		return nil, fmt.Errorf("need to add a new task to list tasks")
 	}
 
 	for _, task := range tasks.Tasks {
