@@ -2,6 +2,7 @@ package entity
 
 import (
 	"errors"
+	"fmt"
 	"github.com/SchunckLeonardo/task-tracker/pkg/utils"
 	"time"
 )
@@ -25,27 +26,28 @@ type Task struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-func NewTask(description string) (*Task, error) {
-	tasks, err := utils.ReadFile[ReadTaskFile](filename)
-	if err != nil {
-		return nil, err
-	}
-
-	lastIdAddedInTask := tasks.Tasks[len(tasks.Tasks)-1].ID
-
+func NewTask() *Task {
 	return &Task{
-		ID:          lastIdAddedInTask + 1,
-		Description: description,
-		Status:      ToDo,
-		CreatedAt:   time.Now(),
-	}, nil
+		Status:    ToDo,
+		CreatedAt: time.Now(),
+	}
 }
 
-func (t *Task) Add() error {
+func (t *Task) Add(description string) error {
 	tasks, err := utils.ReadFile[ReadTaskFile](filename)
 	if err != nil {
 		return err
 	}
+
+	var lastIdAddedInTask int
+	if len(tasks.Tasks) < 1 {
+		lastIdAddedInTask = 1
+	} else {
+		lastIdAddedInTask = tasks.Tasks[len(tasks.Tasks)-1].ID
+	}
+
+	t.Description = description
+	t.ID = lastIdAddedInTask + 1
 
 	tasks.Tasks = append(tasks.Tasks, *t)
 
@@ -59,10 +61,19 @@ func (t *Task) Update(id int, newDescription string) error {
 		return err
 	}
 
+	founded := false
+
 	for i := range tasks.Tasks {
 		if tasks.Tasks[i].ID == id {
 			tasks.Tasks[i].Description = newDescription
+			tasks.Tasks[i].UpdatedAt = time.Now()
+			founded = true
+			break
 		}
+	}
+
+	if founded == false {
+		return fmt.Errorf("not found task with id: %v", id)
 	}
 
 	err = utils.UpdateFile(filename, tasks.Tasks)
@@ -75,10 +86,18 @@ func (t *Task) Delete(id int) error {
 		return err
 	}
 
+	founded := false
+
 	for i := range tasks.Tasks {
 		if tasks.Tasks[i].ID == id {
 			tasks.Tasks = append(tasks.Tasks[:i], tasks.Tasks[i+1:]...)
+			founded = true
+			break
 		}
+	}
+
+	if founded == false {
+		return fmt.Errorf("not found task with id: %v", id)
 	}
 
 	err = utils.UpdateFile(filename, tasks.Tasks)
@@ -95,10 +114,18 @@ func (t *Task) MarkNewStatus(id int, status string) error {
 		return err
 	}
 
+	founded := false
+
 	for i := range tasks.Tasks {
 		if tasks.Tasks[i].ID == id {
 			tasks.Tasks[i].Status = status
+			founded = true
+			break
 		}
+	}
+
+	if founded == false {
+		return fmt.Errorf("not found task with id: %v", id)
 	}
 
 	err = utils.UpdateFile(filename, tasks.Tasks)
