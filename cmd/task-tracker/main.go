@@ -90,25 +90,38 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("%#v", tasks)
+				for _, eachTask := range tasks {
+					fmt.Println()
+					fmt.Printf("Task - %v\nID - %d\nStatus - %v\nCreatedAt - %v\nUpdatedAt - %v\n", eachTask.Description, eachTask.ID, eachTask.Status, eachTask.CreatedAt, eachTask.UpdatedAt)
+				}
 			} else if filter == "in-progress" {
 				tasks, err := task.ListTasksFilteredByStatus(entity.InProgress)
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("%#v", tasks)
+				for _, eachTask := range tasks {
+					fmt.Println()
+					fmt.Printf("Task - %v\nID - %d\nStatus - %v\nCreatedAt - %v\nUpdatedAt - %v\n", eachTask.Description, eachTask.ID, eachTask.Status, eachTask.CreatedAt, eachTask.UpdatedAt)
+				}
 			} else if filter == "done" {
 				tasks, err := task.ListTasksFilteredByStatus(entity.Done)
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("%#v", tasks)
+				for _, eachTask := range tasks {
+					fmt.Println()
+					fmt.Printf("Task - %v\nID - %d\nStatus - %v\nCreatedAt - %v\nUpdatedAt - %v\n", eachTask.Description, eachTask.ID, eachTask.Status, eachTask.CreatedAt, eachTask.UpdatedAt)
+				}
 			} else {
 				tasks, err := task.ListAllTasks()
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("%#v", tasks)
+
+				for _, eachTask := range tasks {
+					fmt.Println()
+					fmt.Printf("Task - %v\nID - %d\nStatus - %v\nCreatedAt - %v\nUpdatedAt - %v\n", eachTask.Description, eachTask.ID, eachTask.Status, eachTask.CreatedAt, eachTask.UpdatedAt)
+				}
 			}
 		}
 	} else {
