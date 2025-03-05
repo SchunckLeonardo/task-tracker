@@ -43,11 +43,11 @@ func (t *Task) Add(description string) error {
 	if len(tasks.Tasks) < 1 {
 		lastIdAddedInTask = 1
 	} else {
-		lastIdAddedInTask = tasks.Tasks[len(tasks.Tasks)-1].ID
+		lastIdAddedInTask = tasks.Tasks[len(tasks.Tasks)-1].ID + 1
 	}
 
 	t.Description = description
-	t.ID = lastIdAddedInTask + 1
+	t.ID = lastIdAddedInTask
 
 	tasks.Tasks = append(tasks.Tasks, *t)
 
