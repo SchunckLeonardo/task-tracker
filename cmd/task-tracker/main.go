@@ -6,16 +6,24 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 const filename = "tasks.json"
 
 func init() {
-	_, err := os.ReadFile(filename)
+	file, err := os.ReadFile(filename)
 	if err != nil {
 		_, err = os.Create(filename)
 		if err != nil {
 			panic("error to create tasks.json")
+		}
+	}
+
+	if !strings.Contains(string(file), "tasks") {
+		err = os.WriteFile(filename, []byte(`{"tasks": []}`), 0666)
+		if err != nil {
+			panic(err)
 		}
 	}
 }
