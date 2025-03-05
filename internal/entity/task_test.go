@@ -29,24 +29,13 @@ func TearDown(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestNewTask(t *testing.T) {
-	Setup(t)
-	defer TearDown(t)
-
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
-
-	assert.Equal(t, task.ID, 3)
-}
-
 func TestTask_Add(t *testing.T) {
 	Setup(t)
 	defer TearDown(t)
 
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
+	task := entity.NewTask()
 
-	err = task.Add()
+	err := task.Add("Buy new book")
 	assert.Nil(t, err)
 
 	tasks, err := utils.ReadFile[entity.ReadTaskFile](fileName)
@@ -61,10 +50,9 @@ func TestTask_Update(t *testing.T) {
 	Setup(t)
 	defer TearDown(t)
 
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
+	task := entity.NewTask()
 
-	err = task.Add()
+	err := task.Add("Buy new book")
 	assert.Nil(t, err)
 
 	err = task.Update(3, "Go shopping")
@@ -82,10 +70,9 @@ func TestTask_Delete(t *testing.T) {
 	Setup(t)
 	defer TearDown(t)
 
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
+	task := entity.NewTask()
 
-	err = task.Add()
+	err := task.Add("Buy new book")
 	assert.Nil(t, err)
 
 	tasks, err := utils.ReadFile[entity.ReadTaskFile](fileName)
@@ -106,10 +93,9 @@ func TestTask_MarkNewStatus(t *testing.T) {
 	Setup(t)
 	defer TearDown(t)
 
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
+	task := entity.NewTask()
 
-	err = task.Add()
+	err := task.Add("Buy new book")
 	assert.Nil(t, err)
 
 	err = task.MarkNewStatus(3, entity.InProgress)
@@ -133,25 +119,22 @@ func TestTask_ListAllTasks(t *testing.T) {
 	Setup(t)
 	defer TearDown(t)
 
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
+	task := entity.NewTask()
 
-	err = task.Add()
+	err := task.Add("Buy new book")
 	assert.Nil(t, err)
 
 	err = task.MarkNewStatus(3, entity.InProgress)
 	assert.Nil(t, err)
 
-	task, err = entity.NewTask("Go shopping")
+	task = entity.NewTask()
+
+	err = task.Add("Go shopping")
 	assert.Nil(t, err)
 
-	err = task.Add()
-	assert.Nil(t, err)
+	task = entity.NewTask()
 
-	task, err = entity.NewTask("Play with my friends Roblox")
-	assert.Nil(t, err)
-
-	err = task.Add()
+	err = task.Add("Play with my friends Roblox")
 	assert.Nil(t, err)
 
 	allTasks, err := task.ListAllTasks()
@@ -165,25 +148,22 @@ func TestTask_ListTasksFilteredByStatus(t *testing.T) {
 	Setup(t)
 	defer TearDown(t)
 
-	task, err := entity.NewTask("Buy new book")
-	assert.Nil(t, err)
+	task := entity.NewTask()
 
-	err = task.Add()
+	err := task.Add("Buy new book")
 	assert.Nil(t, err)
 
 	err = task.MarkNewStatus(3, entity.InProgress)
 	assert.Nil(t, err)
 
-	task, err = entity.NewTask("Go shopping")
+	task = entity.NewTask()
+
+	err = task.Add("Go shopping")
 	assert.Nil(t, err)
 
-	err = task.Add()
-	assert.Nil(t, err)
+	task = entity.NewTask()
 
-	task, err = entity.NewTask("Play with my friends Roblox")
-	assert.Nil(t, err)
-
-	err = task.Add()
+	err = task.Add("Play with my friends Roblox")
 	assert.Nil(t, err)
 
 	err = task.MarkNewStatus(task.ID, entity.Done)
